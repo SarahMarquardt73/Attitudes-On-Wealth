@@ -7,7 +7,7 @@ this file specifically.
 I have also attached the data analysis code that analyzes the different groups and their opinions on wealth/poverty. I have attached my final paper that goes over
 my findings more in detail. However, a main take away from my data analysis is:
 
-The typical respondent was a male, aged 25+, made $50,0001-100,000, conservative, and a democrat. 
+The typical respondent was a male, aged 25+, made $50,0001-$100,000, conservative, and a democrat. 
 
 To statistically test my theory, I used a two-means statistical test. I found that there was no statistical significance between college/non college respondents and their attitudes 
 on wealth. College respondents did not have more "empathy" towards poverty than the typical non-college respondents. 
