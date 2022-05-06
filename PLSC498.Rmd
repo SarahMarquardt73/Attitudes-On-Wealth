@@ -1,0 +1,232 @@
+---
+title: "Data Analysis 498"
+author: "Sarah Marquardt"
+date: "4/25/2022"
+output: html_document
+---
+```{r}
+final_project <- read.csv("Final_Project.csv")
+final_project
+
+
+```
+
+```{r}
+install.packages("dplyr")
+library(dplyr)
+```
+
+
+
+```{r}
+sapply(final_project,class)
+
+```
+
+```{r}
+final_project$age <- as.numeric(final_project$age)
+final_project$largecompanies_taxes <- as.numeric(final_project$largecompanies_taxes)
+final_project$college_student <- as.numeric(final_project$college_student)
+final_project$billionaire_income <- as.numeric(final_project$billionaire_income)
+final_project$gender <- as.numeric(final_project$gender)
+final_project$party_id <- as.numeric(final_project$party_id)
+final_project$annual_income <- as.numeric(final_project$annual_income)
+final_project$ideology <- as.numeric(final_project$ideology)
+final_project$wealthy_work <- as.numeric(final_project$wealthy_work)
+final_project$poor_work <- as.numeric(final_project$poor_work)
+final_project$rich_advantages <- as.numeric(final_project$rich_advantages)
+final_project$poor_obstacles <- as.numeric(final_project$poor_obstacles)
+final_project$taxes_opinion <- as.numeric(final_project$taxes_opinion)
+
+```
+
+Summary statistics
+```{r}
+summary(final_project$age)
+summary(final_project$college_student)
+summary(final_project$gender)
+summary(final_project$annual_income)
+summary(final_project$party_id)
+summary(final_project$ideology)
+```
+
+How many respondents were in college?
+```{r}
+table(final_project$college_student)
+```
+I want to filter the data between college and non college students
+```{r}
+non.collegestudent <- subset(final_project, final_project$college_student == 2)
+college.student <- subset(final_project, final_project$college_student == 1)
+```
+
+```{r}
+sapply(non.collegestudent, class)
+
+```
+
+```{r}
+summary(non.collegestudent$age)
+summary(non.collegestudent$gender)
+summary(non.collegestudent$annual_income)
+summary(non.collegestudent$ideology)
+summary(non.collegestudent$party_id)
+
+```
+```{r}
+summary(college.student$age)
+summary(college.student$gender)
+summary(college.student$annual_income)
+summary(college.student$ideology)
+summary(college.student$party_id)
+```
+
+
+
+
+
+
+First, I want to look at non college people and there average response to the prompts
+```{r}
+m1 <- median(non.collegestudent$taxes_opinion) #5
+m2 <- median(non.collegestudent$largecompanies_taxes) #3
+m3 <- median(non.collegestudent$billionaire_income) #3
+m4 <- median(non.collegestudent$wealthy_work)#5
+m5 <- median(non.collegestudent$poor_work) #5
+m6 <- median(non.collegestudent$rich_advantages) #5
+m7 <- median(non.collegestudent$poor_obstacles) #5
+```
+
+
+```{r}
+m1 <- median(college.student$taxes_opinion) #5
+m2 <- median(college.student$largecompanies_taxes) #3
+m3 <- median(college.student$billionaire_income) #3
+m4 <- median(college.student$wealthy_work)#5
+m5 <- median(college.student$poor_work) #5
+m6 <- median(college.student$rich_advantages) #5
+m7 <- median(college.student$poor_obstacles) #5
+```
+
+Two-sample test statistic. Test this argument using a 5% significant level.
+
+Critical value: 
+t = +-1.96
+What is the conclusion? 
+```{r}
+m1 <- mean(non.collegestudent$score, na.rm = TRUE)
+m1
+m2 <- mean(college.student$score,  na.rm = TRUE)
+m2
+
+sd1 <- sd(non.collegestudent$score, na.rm = TRUE)
+sd2 <- sd(college.student$score, na.rm = TRUE)
+
+n1 <- length(na.omit(non.collegestudent$score, na.rm = TRUE))
+n2 <- length(na.omit(college.student$score, na.rm = TRUE))
+
+diff_in_means <- m1 - m2
+denominator <- sqrt(sd1^2/n1+sd2^2/n2)
+
+t_stat <- (diff_in_means-0)/denominator
+t_stat
+
+```
+
+```{r}
+twogroupt2 <- t.test(non.collegestudent$score, college.student$score, var.equal = FALSE, alternative = "two.sided")
+twogroupt2
+```
+
+
+```{r}
+cor.test(final_project$college_student,final_project$wealthy_work)
+```
+```{r}
+install.packages("ggplot2")
+library(ggplot2)
+```
+```{r}
+chisq.test(final_project$annual_income, final_project$college_student)
+```
+```{r}
+cor.test(final_project$wealthy_work, final_project$college_student)
+plot(final_project$college_student, final_project$wealthy_work)
+```
+```{r}
+data <- table(college.student$wealthy_work)
+data
+
+data.1 <- table(non.collegestudent$wealthy_work)
+data.1
+
+data2 <- table(college.student$poor_work)
+data2
+
+data.3 <- table(non.collegestudent$poor_work)
+data.3
+```
+```{r}
+chisq.test(final_project$college_student,final_project$poor_work, correct = FALSE)
+```
+```{r}
+male1 <- subset(non.collegestudent, gender == 1)
+female1 <- subset(non.collegestudent, gender == 2)
+```
+
+```{r}
+library(ggplot2)
+
+gender_identity <- GSS2 %>%
+  ## turn numbers into names
+  dplyr::mutate(
+    sex = stringr::str_to_title(sex),
+    partyid2 = stringr::str_to_title(partyid2)
+  ) %>%
+  #add counts
+  dplyr::count(sex, partyid2) %>%
+  ## add percentage label with `sprintf()`
+  dplyr::mutate(perc = paste0(sprintf("%4.1f", n / sum(n) * 100), "%"))
+
+gender_identity$sex <- factor(gender_identity$sex,
+                              levels <- c(1,2),
+                              labels <- c("Male","Female"))
+
+graph2 <- ggplot(gender_identity, aes(x=partyid2,y=n, fill=sex))+
+  geom_bar(stat="identity",position="dodge")
+graph2
+
+
+```
+```{r}
+n <- length(final_project$wealthy_work)
+plot <- final_project %>%
+   dplyr::mutate(
+     college_student = stringr::str_to_title(college_student),
+     wealthy_work = stringr::str_to_title(wealthy_work)
+   ) %>%
+  dplyr::count(college_student, wealthy_work) %>%
+  dplyr::mutate(perc = paste0(sprintf("%4.1f", n / sum(n) * 100), "%"))
+final_project$college_student <- factor(final_project$college_student,
+                                        levels = c(1,2),
+                                        labels = c("College", "Non College"))
+graph2 <- ggplot(final_project, aes(x=wealthy_work, y=n, fill=college_student))+
+    geom_bar(stat="identity",position="dodge")
+graph2
+```
+
+
+```{r}
+rich <- subset(final_project, annual_income == 5)
+poor <- subset(final_project, annual_income ==1)
+```
+
+```{r}
+median(rich$poor_obstacles)
+median(rich$ideology)
+```
+```{r}
+median(poor$ideology)
+median(poor$poor_obstacles)
+```
+
