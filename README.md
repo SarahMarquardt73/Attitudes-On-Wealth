@@ -9,7 +9,7 @@ my findings more in detail. However, a main take away from my data analysis is:
 
 The typical respondent was a male, aged 25+, made $50,0001-100,000, conservative, and a democrat. 
 
-To statistically test my theory, I used a two-means statistical test. I found that there was no statistical significance between college/non college and their attitudes 
+To statistically test my theory, I used a two-means statistical test. I found that there was no statistical significance between college/non college respondents and their attitudes 
 on wealth. College respondents did not have more "empathy" towards poverty than the typical non-college respondents. 
 
 People who made $100,000 and up and people that made $25,000 and lower both agreed with the statement "Poor people face more obstacles than rich people" on an aggregate level
